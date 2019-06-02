@@ -102,6 +102,12 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
     
     # 开启 dnmp 服务
         docker-compose up -d
+        
+    # 进入容器
+        ./exec.sh php
+        ./exec.sh mysql
+        ./exec.sh nginx
+        ./exec.sh redis
  
  ## 说明
  
