@@ -109,7 +109,11 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
    
    php通过Dockerfile文件进行创建，默认已安装 redis,iconv,gd,grpc,sockets,swoole等扩展和composer包管理工具，若还需要其它扩展，可在该文件中添加，然后执行docker-compose build命令
  
- ## 联系我
+   此为基础版本，后续会继续完善
  
+ ## 联系我
+   
+   如果有什么问题或者想交流的，欢迎联系！
+   
    email: 783973660@qq.com
    
