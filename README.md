@@ -7,8 +7,6 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
 ##  克隆此包
   
     git clone https://github.com/dengyangl/dnmp.git
-    
-    将my.cnf的权限改为755：chmod 755 my.cnf
 
 ### docker-compose.yml文件简单说明
  
@@ -111,6 +109,9 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
         ./exec.sh mysql
         ./exec.sh nginx
         ./exec.sh redis
+        
+    如果在命令行登录数据库报错：Warning: World-writable config file ‘/etc/my.cnf’ is ignored
+    将my.cnf的权限改为755：chmod 755 my.cnf
  
  ## 说明
  
