@@ -1,6 +1,7 @@
 FROM php:7.2-fpm
 
-ENV PHPREDIS_VERSION 3.1.3
+#ENV PHPREDIS_VERSION 3.1.3
+ENV PHPREDIS_VERSION 4.0.1
 
 #RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
 #RUN sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
@@ -35,6 +36,14 @@ RUN apt-get update && apt-get install -y \
         supervisor \
         zip \
         unzip \
+        inetutils-ping \
+        curl \
+        wget \
+        git \
+        libz-dev \
+        libssl-dev \
+        libnghttp2-dev \
+        libpcre3-dev \
     && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -47,5 +56,9 @@ RUN apt-get update && apt-get install -y \
     && pecl install swoole
 
 # install composer
-RUN curl -sS https://getcomposer.org/installer \
-    | php -- --install-dir=/usr/local/bin --filename=composer
+#RUN curl -sS https://getcomposer.org/installer \
+#    | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer self-update --clean-backups

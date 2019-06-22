@@ -90,6 +90,7 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
     (3)docker-compose up -d 的时候可能一些服务没有跑起来，
        比如mysql，可能你给的dnmp目录权限不够，要给充足权限
        sudo chmod -R 777 dnmp
+    (4)dnmp/php-fpm/supervisor/program.conf文件，stdout_logfile的worker.log文件，路径要指向到.yml文件所配置的工作目录下
     
 ## 命令参考
 
