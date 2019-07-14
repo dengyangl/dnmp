@@ -2,6 +2,7 @@ FROM php:7.2-fpm
 
 #ENV PHPREDIS_VERSION 3.1.3
 ENV PHPREDIS_VERSION 4.0.1
+ENV SWOOLE_VERSION 4.3.3
 
 #RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
 #RUN sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
@@ -34,7 +35,6 @@ RUN apt-get update && apt-get install -y \
         pkg-config \
         ssh-client \
         supervisor \
-        zip \
         unzip \
         inetutils-ping \
         curl \
@@ -53,11 +53,27 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install \
          sockets \
          intl \
-    && pecl install swoole
+         zip \
+    && pecl install yaconf
+
+# Swoole extension
+RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
+    && mkdir -p swoole \
+    && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
+    && rm swoole.tar.gz \
+    && ( \
+    cd swoole \
+    && phpize \
+    && ./configure --enable-async-redis --enable-mysqlnd --enable-openssl --enable-http2 \
+    && make -j$(nproc) \
+    && make install \
+    ) \
+    && rm -r swoole \
+    && docker-php-ext-enable swoole
 
 # install composer
 #RUN curl -sS https://getcomposer.org/installer \
-#    | php -- --install-dir=/usr/local/bin --filename=composer
+#    | php --install-dir=/usr/local/bin --filename=composer
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
