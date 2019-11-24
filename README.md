@@ -18,7 +18,7 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
           - "3306:3306"                         # 格式 - 项目配置文件使用的端口(如laravel的.env):容器内使用的端口
         volumes:
           - ./mysql:/var/lib/mysql
-          - ./my.cnf:/etc/mysql/conf.d/my.cnf
+          - ./my.cnf:/etc/mysql/conf.d/my.cnf   # 可以将文件中的[mysqld]和[mysqldump]下面的max_allowed_packet值设置为320M，[mysqld]下面的sql_mode设置为"NO_AUTO_VALUE_ON_ZERO"，防止*.sql文件过大无法上传导入
         environment:
           - MYSQL_ROOT_PASSWORD=mypassword      # 修改为自己的mysql数据库登录密码
     
@@ -43,7 +43,7 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
           - redis:redis
         volumes:
           - /volumes/data/source:/volumes/data/source       # 格式：宿主机的目录:容器内的目录，可以修改为代码文件夹
-          - ./php-fpm/php.ini:/usr/local/etc/php/php.ini:ro
+          - ./php-fpm/php.ini:/usr/local/etc/php/php.ini:ro     # (1)可以将文件中，error_reporting的值设置为 E_ALL & ~E_NOTICE & ~E_WARNING & ~E_DEPRECATED & ~E_STRICT (2)可以将display_errors设置为on，方便调试
           - ./php-fpm/cron/laravel:/var/spool/cron/crontabs/laravel
           - ./php-fpm/supervisor/program.conf:/etc/supervisor/conf.d/program.conf
         command: supervisord -c /etc/supervisor/supervisord.conf
@@ -119,6 +119,8 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
    使用的都是官方的镜像。
    
    php通过Dockerfile文件进行创建，默认已安装 redis,iconv,gd,zip,grpc,sockets,swoole,yaconf等扩展和composer包管理工具，若还需要其它扩展，可在该文件中添加，然后执行docker-compose build命令
+ 
+   docker-compose.yml文件中包含了phpMyAdmin，nodejs镜像
  
    此为基础版本，后续会继续完善
  
