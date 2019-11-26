@@ -118,7 +118,7 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
  
    使用的都是官方的镜像。
    
-   php通过Dockerfile文件进行创建，默认已安装 redis,iconv,gd,zip,grpc,sockets,swoole,yaconf等扩展和composer包管理工具，若还需要其它扩展，可在该文件中添加，然后执行docker-compose build命令
+   php通过Dockerfile文件进行创建，默认已安装 redis,iconv,gd,zip,grpc,sockets,swoole,yaconf,rdkafka 等扩展和composer包管理工具，若还需要其它扩展，可在该文件中添加，然后执行docker-compose build命令
  
    docker-compose.yml文件中包含了phpMyAdmin，nodejs镜像
  

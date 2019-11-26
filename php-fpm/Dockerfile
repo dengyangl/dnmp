@@ -39,7 +39,6 @@ RUN apt-get update && apt-get install -y \
         inetutils-ping \
         curl \
         wget \
-        git \
         libz-dev \
         libssl-dev \
         libnghttp2-dev \
@@ -78,3 +77,23 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update --clean-backups
+
+
+
+# librdkafka
+RUN wget https://github.com/edenhill/librdkafka/archive/master.zip \
+    && mv master.zip librdkafka-master.zip \
+    && unzip librdkafka-master.zip \
+    && cd librdkafka-master \
+    && ./configure \
+    && make \
+    && make install
+
+# php-rdkafka
+RUN wget https://github.com/arnaud-lb/php-rdkafka/archive/3.0.1.tar.gz -O php-rdkafka-3.0.1.tar.gz \
+    && tar -zxvf php-rdkafka-3.0.1.tar.gz \
+    && cd php-rdkafka-3.0.1 \
+    && phpize \
+    && ./configure --with-php-config=php-config \
+    && make \
+    && make install
