@@ -39,6 +39,7 @@ RUN apt-get update && apt-get install -y \
         inetutils-ping \
         curl \
         wget \
+        telnet \
         libz-dev \
         libssl-dev \
         libnghttp2-dev \
