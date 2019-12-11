@@ -91,6 +91,31 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
        比如mysql，可能你给的dnmp目录权限不够，要给充足权限
        sudo chmod -R 777 dnmp
     (4)dnmp/php-fpm/supervisor/program.conf文件，stdout_logfile的worker.log文件，路径要指向到docker-compose.yml文件里面所配置的工作目录下(如: /source/worker.log，/source为工作目录)
+    (5)在php的volumes中加入(使得在docker容器里面执行 date查询的时间与linux的时间相同)： - /etc/localtime:/etc/localtime
+    (6)在php.ini文件里面设置：date.timezone = "Asia/Shanghai"，使得php代码获取的时间与系统相同
+    (7)swoole的websocket服务监听的端口号，要配置在php容器的ports下面，nginx的*.conf文件例子：
+        server {
+            listen 80;
+        
+            server_name 127.0.0.1;
+        
+            root        /source/swoole_test/server;
+            index       index.php index.html index.htm;
+            charset     utf-8;
+        
+            access_log /var/log/nginx/swoole_test_ws.access.log main;
+            error_log  /var/log/nginx/swoole_test_ws.error.log debug;
+        
+            location / {
+                proxy_http_version 1.1;
+                proxy_set_header Connection "keep-alive";
+                proxy_set_header X-Real-IP $remote_addr;
+                if (!-f $request_filename) {
+                     proxy_pass http://PHP-FPM:8812;    #重要
+                }
+            }
+        
+        }
     
 ## 命令参考
 
