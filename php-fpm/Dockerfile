@@ -78,7 +78,9 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz 
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
-    && composer self-update --clean-backups
+    && composer self-update --clean-backups \
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
+    # && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 
 
