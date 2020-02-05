@@ -4,6 +4,8 @@ FROM php:7.2-fpm
 ENV PHPREDIS_VERSION 4.0.1
 ENV SWOOLE_VERSION 4.3.3
 
+ENV MOSQUITTO_VERSION 1.4.11
+
 #RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
 #RUN sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
 #RUN sed -i "s/security.debian.org/mirrors.aliyun.com\/debian-security/g" /etc/apt/sources.list
@@ -18,7 +20,7 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
         pdo pdo_mysql \
         bcmath
 
-# install php extension: iconv,gd,zip,grpc,sockets,swoole
+# install php extension: iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt)
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -45,6 +47,10 @@ RUN apt-get update && apt-get install -y \
         libnghttp2-dev \
         libpcre3-dev \
         #libhiredis-devel \
+        # mqtt extension
+        libc-ares-dev \
+        # mqtt extension
+        uuid-dev \
     && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -55,7 +61,12 @@ RUN apt-get update && apt-get install -y \
          sockets \
          intl \
          zip \
-    && pecl install yaconf
+    && pecl install yaconf \
+    # mqtt extension
+    && curl -s https://mosquitto.org/files/source/mosquitto-1.4.11.tar.gz > mosquitto-$MOSQUITTO_VERSION.tgz \
+        && tar -zxvf mosquitto-$MOSQUITTO_VERSION.tgz \
+        && cd mosquitto-$MOSQUITTO_VERSION && make && make install \
+        && pecl install Mosquitto-alpha
 
 # Swoole extension
 RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
