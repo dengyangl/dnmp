@@ -143,7 +143,7 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
  
    使用的都是官方的镜像。
    
-   php通过Dockerfile文件进行创建，默认已安装 redis,iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt),rdkafka 等扩展和composer包管理工具，若还需要其它扩展，可在该文件中添加，然后执行docker-compose build命令
+   php通过Dockerfile文件进行创建，默认已安装 redis,iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt),rdkafka,pcntl 等扩展和composer包管理工具，若还需要其它扩展，可在该文件中添加，然后执行docker-compose build命令
  
    Dockerfile的composer中, composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ 与 composer config -g repo.packagist composer https://packagist.phpcomposer.com 等效(将composer换成国内镜像，加上 -g [--global] 进行全局配置，就不会去查找composer.json文件，导致报错)
  

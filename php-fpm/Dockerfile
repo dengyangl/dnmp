@@ -20,7 +20,7 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
         pdo pdo_mysql \
         bcmath
 
-# install php extension: iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt)
+# install php extension: iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt),pcntl
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -61,6 +61,7 @@ RUN apt-get update && apt-get install -y \
          sockets \
          intl \
          zip \
+         pcntl \
     && pecl install yaconf \
     # mqtt extension
     && curl -s https://mosquitto.org/files/source/mosquitto-1.4.11.tar.gz > mosquitto-$MOSQUITTO_VERSION.tgz \
@@ -77,6 +78,8 @@ RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz 
     cd swoole \
     && phpize \
     && ./configure --enable-async-redis --enable-mysqlnd --enable-openssl --enable-http2 \
+    # 支持sockets资源
+    #&& --enable-sockets
     && make -j$(nproc) \
     && make install \
     ) \
