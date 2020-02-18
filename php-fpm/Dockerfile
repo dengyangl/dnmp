@@ -22,6 +22,7 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
 
 # install php extension: iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt),pcntl
 RUN apt-get update && apt-get install -y \
+        vim \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -64,10 +65,13 @@ RUN apt-get update && apt-get install -y \
          pcntl \
     && pecl install yaconf \
     # mqtt extension
-    && curl -s https://mosquitto.org/files/source/mosquitto-1.4.11.tar.gz > mosquitto-$MOSQUITTO_VERSION.tgz \
+    && curl -s https://mosquitto.org/files/source/mosquitto-$MOSQUITTO_VERSION.tar.gz > mosquitto-$MOSQUITTO_VERSION.tgz \
         && tar -zxvf mosquitto-$MOSQUITTO_VERSION.tgz \
         && cd mosquitto-$MOSQUITTO_VERSION && make && make install \
-        && pecl install Mosquitto-alpha
+        && pecl install Mosquitto-alpha \
+        && echo "extension=mosquitto.so" > /usr/local/etc/php/conf.d/docker-php-ext-mosquitto.ini \
+        && ln -s /usr/local/lib/libmosquitto.so.1 /usr/lib/libmosquitto.so.1 && ldconfig \
+        && cp /etc/mosquitto/mosquitto.conf.example /etc/mosquitto/mosquitto.conf && echo "user root" >> /etc/mosquitto/mosquitto.conf
 
 # Swoole extension
 RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
