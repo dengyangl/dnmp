@@ -6,8 +6,12 @@ ENV SWOOLE_VERSION 4.3.3
 
 ENV MOSQUITTO_VERSION 1.4.11
 
+ENV PHP_RDKAFKA_VERSION 3.0.1
+
+
 #RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
 #RUN sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
+RUN sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
 #RUN sed -i "s/security.debian.org/mirrors.aliyun.com\/debian-security/g" /etc/apt/sources.list
 
 # install redis and mysql
@@ -62,6 +66,7 @@ RUN apt-get update && apt-get install -y \
          sockets \
          intl \
          zip \
+         # pcntl_fork
          pcntl \
     && pecl install yaconf \
     # mqtt extension
@@ -112,9 +117,9 @@ RUN wget https://github.com/edenhill/librdkafka/archive/master.zip \
     && make install
 
 # php-rdkafka
-RUN wget https://github.com/arnaud-lb/php-rdkafka/archive/3.0.1.tar.gz -O php-rdkafka-3.0.1.tar.gz \
-    && tar -zxvf php-rdkafka-3.0.1.tar.gz \
-    && cd php-rdkafka-3.0.1 \
+RUN wget https://github.com/arnaud-lb/php-rdkafka/archive/$PHP_RDKAFKA_VERSION.tar.gz -O php-rdkafka-$PHP_RDKAFKA_VERSION.tar.gz \
+    && tar -zxvf php-rdkafka-$PHP_RDKAFKA_VERSION.tar.gz \
+    && cd php-rdkafka-$PHP_RDKAFKA_VERSION \
     && phpize \
     && ./configure --with-php-config=php-config \
     && make \
