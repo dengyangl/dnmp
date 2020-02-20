@@ -150,6 +150,8 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
    (3)Dockerfile的composer中, composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ 与 composer config -g repo.packagist composer https://packagist.phpcomposer.com 等效(将composer换成国内镜像，加上 -g [--global] 进行全局配置，就不会去查找composer.json文件，导致报错)
  
    (4)docker-compose.yml文件中包含了phpMyAdmin，nodejs镜像(还有些问题)
+   
+   (5)如果是linux系统使用，则可以在docker-compose.yml文件的php镜像里面的volumes中加入 /etc/localtime:/etc/localtime (容器的时间时区与linux的同步)
  
    注意：此为基础版本，后续会继续完善
  
