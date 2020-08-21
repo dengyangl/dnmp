@@ -159,6 +159,7 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
  ## 持续更新的内容
  
    1.2020.8.21
+   
      (1)Dockerfile
         (1.1)librdkafka
         (1.2)php-rdkafka
@@ -166,6 +167,7 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
         (1.4)Imagick(php扩展)(pdf转png)
         (1.5)xvfb(linux扩展-html转pdf)
         (1.6)wkhtmltopdf(linux扩展-html转pdf) 
+        
      (2)php.ini
         (2.1)max_execution_time = 300
              request_terminate_timeout = 300
@@ -175,10 +177,12 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
         (2.5)upload_max_filesize = 20M
         (2.6);extension="phpwkhtmltox.so"
              ;extension=imagick.so
+             
      (3)my.cnf
          (3.1)max_allowed_packet = 320M
          (3.2)sql_mode="NO_AUTO_VALUE_ON_ZERO"
          (3.3)max_allowed_packet = 320M
+         
      (4)nginx.conf
          (4.1)#fastcgi方式
              #fastcgi 连接超时时间，默认60秒
@@ -198,8 +202,10 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
              #proxy_buffers 4 64k;
              #proxy_busy_buffers_size 128k;
              #proxy_temp_file_write_size 128k;
+             
      (5)thinkphp5_demo.conf
          (5.1)client_max_body_size 20m;
+         
      (6)docker-compose.yml
          (6.1)sonarqube
          (6.2)postgres1
