@@ -154,7 +154,60 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
    (5)如果是linux系统使用，则可以在docker-compose.yml文件的php镜像里面的volumes中加入 /etc/localtime:/etc/localtime (容器的时间时区与linux的同步)
  
    注意：此为基础版本，后续会继续完善
+   
  
+ ## 持续更新的内容
+ 
+   1.2020.8.21
+     (1)Dockerfile
+        (1.1)librdkafka
+        (1.2)php-rdkafka
+        (1.3)ImageMagick(linux扩展)(pdf转png)
+        (1.4)Imagick(php扩展)(pdf转png)
+        (1.5)xvfb(linux扩展-html转pdf)
+        (1.6)wkhtmltopdf(linux扩展-html转pdf) 
+     (2)php.ini
+        (2.1)max_execution_time = 300
+             request_terminate_timeout = 300
+        (2.2)memory_limit = 2048M
+        (2.3)error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING & ~E_DEPRECATED & ~E_STRICT
+        (2.4)tp5：display_errors = On
+        (2.5)upload_max_filesize = 20M
+        (2.6);extension="phpwkhtmltox.so"
+             ;extension=imagick.so
+     (3)my.cnf
+         (3.1)max_allowed_packet = 320M
+         (3.2)sql_mode="NO_AUTO_VALUE_ON_ZERO"
+         (3.3)max_allowed_packet = 320M
+     (4)nginx.conf
+         (4.1)#fastcgi方式
+             #fastcgi 连接超时时间，默认60秒
+             #fastcgi_connect_timeout 300;
+             #nginx 进程向 fastcgi 进程发送请求过程的超时时间，默认值60秒
+             #fastcgi_send_timeout 300;
+             #fastcgi_read_timeout 300;
+             #fastcgi_buffer_size 128k;
+             #fastcgi_buffers 8 128k;
+             #fastcgi_busy_buffers_size 256k;
+             #fastcgi_temp_file_write_size 256k;
+         (4.2)#proxy方式
+             #proxy_connect_timeout 300;
+             #proxy_send_timeout 300;
+             #proxy_read_timeout 300;
+             #proxy_buffer_size 16k;
+             #proxy_buffers 4 64k;
+             #proxy_busy_buffers_size 128k;
+             #proxy_temp_file_write_size 128k;
+     (5)thinkphp5_demo.conf
+         (5.1)client_max_body_size 20m;
+     (6)docker-compose.yml
+         (6.1)sonarqube
+         (6.2)postgres1
+         (6.3)sentry1
+         (6.4)cron
+         (6.5)worker
+
+
  ## 联系我
    
    如果有什么问题或者想交流的，欢迎联系！
