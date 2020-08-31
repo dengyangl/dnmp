@@ -82,6 +82,8 @@ RUN apt-get update && apt-get install -y \
     # mqtt extension
     && curl -s https://mosquitto.org/files/source/mosquitto-$MOSQUITTO_VERSION.tar.gz > mosquitto-$MOSQUITTO_VERSION.tgz \
         && tar -zxvf mosquitto-$MOSQUITTO_VERSION.tgz \
+        ###删除压缩包
+        && rm -r mosquitto-$MOSQUITTO_VERSION.tgz \
         && cd mosquitto-$MOSQUITTO_VERSION && make && make install \
         && pecl install Mosquitto-alpha \
         && echo "extension=mosquitto.so" > /usr/local/etc/php/conf.d/docker-php-ext-mosquitto.ini \
@@ -136,6 +138,8 @@ RUN curl -sS https://getcomposer.org/installer | php \
 RUN wget https://github.com/edenhill/librdkafka/archive/master.zip \
     && mv master.zip librdkafka-master.zip \
     && unzip librdkafka-master.zip \
+    ###删除压缩包
+    && rm -r librdkafka-master.zip \
     && cd librdkafka-master \
     && ./configure \
     && make \
@@ -144,6 +148,8 @@ RUN wget https://github.com/edenhill/librdkafka/archive/master.zip \
 # php-rdkafka
 RUN wget https://github.com/arnaud-lb/php-rdkafka/archive/$PHP_RDKAFKA_VERSION.tar.gz -O php-rdkafka-$PHP_RDKAFKA_VERSION.tar.gz \
     && tar -zxvf php-rdkafka-$PHP_RDKAFKA_VERSION.tar.gz \
+    ###删除压缩包
+    && rm -r php-rdkafka-$PHP_RDKAFKA_VERSION.tar.gz \
     && cd php-rdkafka-$PHP_RDKAFKA_VERSION \
     && phpize \
     && ./configure --with-php-config=php-config \
