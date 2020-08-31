@@ -212,7 +212,16 @@ docker搭建lnmp环境，php 7.2 + nginx latest + mysql 5.7 + redis 4
          (6.3)sentry1
          (6.4)cron
          (6.5)worker
-
+         
+   2.2020.8.31
+   
+      (1)Dockerfile
+         (1.1)更换源
+         (1.2)更换swoole版本(4.3.3--->4.5.2)
+              
+      (2)php.ini
+         (2.1)swoole.use_shortname = off;   php的hyperf框架需要配置
+       
 
  ## 联系我
    

@@ -2,7 +2,8 @@ FROM php:7.2-fpm
 
 #ENV PHPREDIS_VERSION 3.1.3
 ENV PHPREDIS_VERSION 4.0.1
-ENV SWOOLE_VERSION 4.3.3
+#ENV SWOOLE_VERSION 4.3.3
+ENV SWOOLE_VERSION 4.5.2
 
 ENV MOSQUITTO_VERSION 1.4.11
 
@@ -12,12 +13,9 @@ ENV PHP_RDKAFKA_VERSION 3.0.1
 #ENV LIBRDKAFKA 0.9.4
 #ENV PROTOC_VERSION 3.9.1
 
-#RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
-RUN sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
-#RUN sed -i "s/security.debian.org/mirrors.aliyun.com\/debian-security/g" /etc/apt/sources.list
 
-#RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
-#RUN apt-get clean
+RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+RUN apt-get clean
 
 # install redis and mysql
 RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz \
@@ -29,7 +27,7 @@ RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$P
         pdo pdo_mysql \
         bcmath
 
-# install php extension: iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt),pcntl
+# install php extension: iconv,gd,zip,grpc,sockets,swoole,yaconf,mosquitto(mqtt),pcntl...
 RUN apt-get update && apt-get install -y \
         vim \
         libfreetype6-dev \
@@ -90,22 +88,38 @@ RUN apt-get update && apt-get install -y \
         && ln -s /usr/local/lib/libmosquitto.so.1 /usr/lib/libmosquitto.so.1 && ldconfig \
         && cp /etc/mosquitto/mosquitto.conf.example /etc/mosquitto/mosquitto.conf && echo "user root" >> /etc/mosquitto/mosquitto.conf
 
+
+###可用
+
 # Swoole extension
-RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
-    && mkdir -p swoole \
-    && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
-    && rm swoole.tar.gz \
-    && ( \
-    cd swoole \
-    && phpize \
-    && ./configure --enable-async-redis --enable-mysqlnd --enable-openssl --enable-http2 \
-    # 支持sockets资源
-    #&& --enable-sockets
-    && make -j$(nproc) \
-    && make install \
-    ) \
-    && rm -r swoole \
-    && docker-php-ext-enable swoole
+#RUN wget https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz \
+#    && mkdir -p swoole \
+#    && tar -xf swoole.tar.gz -C swoole --strip-components=1 \
+#    && rm swoole.tar.gz \
+#    && ( \
+#    cd swoole \
+#    && phpize \
+#    && ./configure --enable-async-redis --enable-mysqlnd --enable-openssl --enable-http2 \
+#    # 支持sockets资源
+#    #&& --enable-sockets
+#    && make -j$(nproc) \
+#    && make install \
+#    ) \
+#    && rm -r swoole \
+#    && docker-php-ext-enable swoole
+
+# Swoole extension
+RUN curl -L -o /tmp/swoole.tar https://pecl.php.net/get/swoole-${SWOOLE_VERSION}.tar \
+    && tar xvf /tmp/swoole.tar \
+    && rm -r /tmp/swoole.tar \
+    && mkdir -p /usr/src/php/ext \
+    && mv swoole-${SWOOLE_VERSION} /usr/src/php/ext/swoole \
+    && docker-php-ext-install swoole
+
+#RUN pecl install -y swoole-4.5.2 \
+#    && docker-php-ext-enable swoole \
+#    #&& php --ri swoole
+
 
 # install composer
 #RUN curl -sS https://getcomposer.org/installer \
@@ -117,8 +131,6 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
     # && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
-
-###可用
 
 # librdkafka
 RUN wget https://github.com/edenhill/librdkafka/archive/master.zip \
@@ -175,7 +187,7 @@ RUN wget https://github.com/arnaud-lb/php-rdkafka/archive/$PHP_RDKAFKA_VERSION.t
 #    && chmod +x /usr/bin/wkhtmltopdf \
 #    && cp /usr/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
-###
+###可用,end
 
 
 
